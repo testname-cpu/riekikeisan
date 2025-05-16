@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>利益計算ツール</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 20px auto; padding: 10px; }
+    input { width: 100%; padding: 8px; margin: 5px 0; }
+    button { padding: 10px 20px; margin-top: 10px; }
+    .result { background: #f0f0f0; padding: 10px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>利益自動計算ツール</h1>
+
+  <label>売上高（円）<input id="sales" type="number"></label>
+  <label>原価（円）<input id="cost" type="number"></label>
+  <label>販促費・一般管理費（円）<input id="sgna" type="number"></label>
+  <label>営業外費用（円）<input id="nonop_expense" type="number"></label>
+  <label>営業外収益（円）<input id="nonop_income" type="number"></label>
+  <label>特別損失（円）<input id="extra_loss" type="number"></label>
+  <label>特別収益（円）<input id="extra_gain" type="number"></label>
+  <label>法人税・事業税・住民税 合計（円）<input id="tax" type="number"></label>
+
+  <button onclick="calculate()">計算する</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function calculate() {
+      const sales = +document.getElementById('sales').value;
+      const cost = +document.getElementById('cost').value;
+      const sgna = +document.getElementById('sgna').value;
+      const nonop_expense = +document.getElementById('nonop_expense').value;
+      const nonop_income = +document.getElementById('nonop_income').value;
+      const extra_loss = +document.getElementById('extra_loss').value;
+      const extra_gain = +document.getElementById('extra_gain').value;
+      const tax = +document.getElementById('tax').value;
+
+      const grossProfit = sales - cost;
+      const grossMargin = (grossProfit / sales) * 100;
+      const opProfit = grossProfit - sgna;
+      const ordinaryProfit = opProfit - nonop_expense + nonop_income;
+      const pretaxProfit = ordinaryProfit - extra_loss + extra_gain;
+      const netProfit = pretaxProfit - tax;
+
+      document.getElementById('result').innerHTML = `
+        粗利益：${grossProfit.toLocaleString()} 円<br>
+        粗利益率：${grossMargin.toFixed(2)} %<br>
+        営業利益：${opProfit.toLocaleString()} 円<br>
+        経常利益：${ordinaryProfit.toLocaleString()} 円<br>
+        税引前当期純利益：${pretaxProfit.toLocaleString()} 円<br>
+        当期純利益：${netProfit.toLocaleString()} 円
+      `;
+    }
+  </script>
+
+  <p>他の業務自動化ツールも多数掲載中 👉 <a href="https://bit.ly/4iJ4576" target="_blank">こちらから</a></p>
+</body>
+</html>
